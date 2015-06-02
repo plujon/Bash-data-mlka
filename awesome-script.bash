@@ -294,14 +294,10 @@ echo "INFO: We're looking for text data and moving it to the correct locations."
 # Does the Wiki-Data folder exists?
 # Yes: print exists
 # No: make directory
-if [ -d "$DIR_WIKI_DATA" ]; then
-    echo "INFO: $DIR_WIKI_DATA folder exists."
-    echo "      If we find Wikidata we will move it to the $DIR_WIKI_DATA folder."
-else
-    echo "INFO: Creating $DIR_WIKI_DATA folder"
-    echo "      If we find Wikidata we will move it $DIR_WIKI_DATA folder."
-    mkdir "$DIR_WIKI_DATA"
-fi
+mkdir -p "$DIR_WIKI_DATA" || {
+    echo failed to mkdir "$DIR_WIKI_DATA";
+    exit 1;
+}
 
 # Search for compressed wiki dumps
 #echo
