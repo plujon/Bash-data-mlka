@@ -307,7 +307,7 @@ mkdir -p "$DIR_WIKI_DATA" || {
 
 # Move Wikipedia dumps into wikidata folder for processing.
 WIKI_DATA_FILE_COUNT=0
-for i in $(find . -maxdepth 0 -iname '*wiki*.bz2'); do
+for i in *wiki*.bz2; do
     if [ ! -f "$DIR_WIKI_DATA/$i" ]; then
         # safe to move the bz2 file into Wiki-Data:
         mv "$i" "$DIR_WIKI_DATA"
@@ -381,7 +381,7 @@ fi
 # NO: nothing.
 JAMES_DATA_FILE_COUNT=0
 if [ -d "$DIR_JAMES_DATA" ]; then
-    for i in $(find * -maxdepth 0 -iname '*james*.txt'); do
+    for i in *james*.txt; do
 	# Added a check so it doesn't clobber files:
         if [ ! -f "$DIR_JAMES_DATA/$i" ]; then
 
