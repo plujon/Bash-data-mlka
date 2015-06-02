@@ -280,8 +280,8 @@ echo "INFO: We're looking for text data and moving it to the correct locations."
 # Move any wikipedia dumps into Wiki-Data.
 ##############################
 mkdir -p Wiki-Data || {
-    echo failed to mkdir Wiki-Data;
-    exit 1;
+    echo failed to mkdir Wiki-Data
+    exit 1
 }
 mv *wiki*.bz2 Wiki-Data
 # TODO - Do something with Wiki-Data
