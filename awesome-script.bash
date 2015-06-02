@@ -1,5 +1,5 @@
-#########################
 #!/bin/bash
+#########################
 # Script Name: awesome-script.bash
 # Authors: Hugh Paterson III <email here>
 #          Jonathan Duff <jonathan@dufffamily.org>
