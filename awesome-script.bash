@@ -306,25 +306,17 @@ mkdir -p "$DIR_WIKI_DATA" || {
 #echo
 
 # Move Wikipedia dumps into wikidata folder for processing.
-# Double check Wiki-Data folder is there then run:
 WIKI_DATA_FILE_COUNT=0
-if [ -d "$DIR_WIKI_DATA" ]; then
-    # So we're are in HOME_FOLDER here:
-    for i in $(find * -maxdepth 0 -iname '*wiki*.bz2'); do
-        # Now we're reaching into Wiki-Data folder:
-        # If the file exists then do NOT copy.
-        if [ ! -f "$DIR_WIKI_DATA/$i" ]; then
-
-            # safe to move the bz2 file into Wiki-Data:
-            mv "$i" "$DIR_WIKI_DATA"
-	    (( WIKI_DATA_FILE_COUNT = WIKI_DATA_FILE_COUNT + 1 ))
-	    # http://www.tldp.org/LDP/abs/html/dblparens.html
-
-        fi
-    done # end of for loop
-    echo
-    echo "INFO: Moved " $WIKI_DATA_FILE_COUNT " Wikidata into the $DIR_WIKI_DATA folder."
-fi
+for i in $(find . -maxdepth 0 -iname '*wiki*.bz2'); do
+    if [ ! -f "$DIR_WIKI_DATA/$i" ]; then
+        # safe to move the bz2 file into Wiki-Data:
+        mv "$i" "$DIR_WIKI_DATA"
+	(( WIKI_DATA_FILE_COUNT = WIKI_DATA_FILE_COUNT + 1 ))
+	# http://www.tldp.org/LDP/abs/html/dblparens.html
+    fi
+done # end of for loop
+echo
+echo "INFO: Moved " $WIKI_DATA_FILE_COUNT " Wikidata into the $DIR_WIKI_DATA folder."
 
 ### HUGH:
 ### This was moved from above to here because we don't want to index
