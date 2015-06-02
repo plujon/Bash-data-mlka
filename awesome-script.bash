@@ -47,7 +47,6 @@ DIR_SECOND_STATS_TITLE=Second-Stats
 
 # Variables for Corpora versions
 DIR_JAMES_DATA=James-Data #this variable needs to be updated in the clean-up script. I wish there was a way to refernce these variables from that script.
-DIR_WIKI_DATA=Wiki-Data
 DIR_TYPOGRAHICAL_CORRECT_DATA=Typographically-Clean-Corproa
 DIR_CLEAN_AND_POSSIBLE_DATA=Typo-Clean-And-Possible-To-Type-Corpora
 DIR_TEC_FILES=TECkit-tec-Files
@@ -65,7 +64,6 @@ THIRD_STATS_TITLE=Third_Stats
 ##############################
 
 JAMES_LIST_FILE=James-list.txt 
-WIKI_LIST_FILE=Wikipedia-list.txt
 CORPUS_LIST_FILE=Corpus-list.txt #This file is currently only the James corpus, but after the wikidata is available this file should a combined list of all corpora. (I think - hp3)
 LANGAUGE_LIST_FILE=Language_ID.txt
 
@@ -227,15 +225,6 @@ fi
 
 
 # Files to clean up
-if [ -f $WIKI_LIST_FILE ]; then
-    # Delete the file
-    rm -f $WIKI_LIST_FILE
-    echo "INFO: Replacing previously generated files!"
-    touch $WIKI_LIST_FILE
-else
-    # Create the Wikipedia-list.txt
-	touch $WIKI_LIST_FILE 
-fi
 
 if [ -f $CORPUS_LIST_FILE ]; then
     # Delete the file
@@ -288,75 +277,14 @@ echo "INFO: We're looking for text data and moving it to the correct locations."
 # Wiki
 
 ##############################
-#Look for Wikipedia data.
+# Move any wikipedia dumps into Wiki-Data.
 ##############################
-
-# Does the Wiki-Data folder exists?
-# Yes: print exists
-# No: make directory
-mkdir -p "$DIR_WIKI_DATA" || {
-    echo failed to mkdir "$DIR_WIKI_DATA";
+mkdir -p Wiki-Data || {
+    echo failed to mkdir Wiki-Data;
     exit 1;
 }
-
-# Search for compressed wiki dumps
-#echo
-#echo "INFO: Looking for corpora from Wikipedia data dumps."
-#echo "      If we find anything we'll let you know."
-#echo
-
-# Move Wikipedia dumps into wikidata folder for processing.
-WIKI_DATA_FILE_COUNT=0
-for i in *wiki*.bz2; do
-    if [ ! -f "$DIR_WIKI_DATA/$i" ]; then
-        # safe to move the bz2 file into Wiki-Data:
-        mv "$i" "$DIR_WIKI_DATA"
-	(( WIKI_DATA_FILE_COUNT = WIKI_DATA_FILE_COUNT + 1 ))
-	# http://www.tldp.org/LDP/abs/html/dblparens.html
-    fi
-done # end of for loop
-echo
-echo "INFO: Moved " $WIKI_DATA_FILE_COUNT " Wikidata into the $DIR_WIKI_DATA folder."
-
-### HUGH:
-### This was moved from above to here because we don't want to index
-### something then move it to a different folder.
-
-### JONATHAN:
-###I think I moved it to the top so that all indexing was done at the same time. I was not able to do a side by side check. Therefore I would prefere to leave it up where it was. The reason for this was that it worked with both new data and with re-runs where new data was added after the first run.
-
-### HUGH:
-### The result of running find with maxdepth 1 may not be ideal.
-### Since all *wiki*.bz2 files are in $DIR_WIKI_DATA
-### we would want to just have the $WIKI_LIST_FILE
-### contain the file_names. Not dir/file_names
-
-###I am not sure that this is an accurate assumption. Before am convenced we sould talk in person so that I can see what you mean. Can you please present future suggestions in code blocks (Three lines of "#" on the top and two lines of "#" on the bottom) in seperate files? like a small .sh file which we can later delete.
-
-### Proposed change:
-
-# List all Wikipedia dumps and store
-# results into the file Wikipedia-list.txt
-#find * -maxdepth 1 -iname '*wiki*.bz2' >> $WIKI_LIST_FILE
-cd "$DIR_WIKI_DATA"
-find * -maxdepth 0 -iname '*wiki*.bz2' >> ../$WIKI_LIST_FILE
-cd ..
-
-if [ "$(cat $WIKI_LIST_FILE | wc -l)" -eq "0" ]; then
-    # No wikipedia dumps were found.
-    echo
-    echo "INFO:  We didn't find any Wikipedia data. We're moving on."
-    echo
-else
-    # Some uncompressed Wikipedia dumps exist. 
-    echo
-    echo "INFO: It looks like we found some Wikipedia data."
-    echo "      We think there are: $(cat $WIKI_LIST_FILE | wc -l) dumps to be processed."
-    echo
-#There is a bug here in that the above line has a long space in it when returned to the command prompt.
-# JD->HP: It might be able to be solved by just moving the trailing text to the next line.
-#Actually I think it needs {} so that the added spaces don't get added in to the output. But I am not sure about the syntax. Syntax for me on all of this is a bit fuzzy. I am mostly copy and pasting from stack exchange.
-fi    
+mv *wiki*.bz2 Wiki-Data
+# TODO - Do something with Wiki-Data
 
 # James
 
