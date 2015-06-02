@@ -83,7 +83,7 @@ INTIAL_COUNT=blablabla #Not sure what this is or why it is needed.
 ##############################
 
 # Check to see if csvfix is installed and in path:
-if hash csvfix 2>/dev/null; then
+if type csvfix &>/dev/null; then
     echo
     echo "INFO: Great you have csvfix installed."
 else
@@ -102,7 +102,7 @@ else
 fi
 
 # Check to see if TECkit is installed and in path:
-if hash teckit_compile 2>/dev/null; then
+if type teckit_compile &>/dev/null; then
     echo "INFO: Great you have teckit_compile installed."
 else
     echo
@@ -117,7 +117,7 @@ else
 fi
 
 # Check to see if txtconv is installed and in path:
-if hash txtconv 2>/dev/null; then
+if type txtconv &>/dev/null; then
 #    echo
     echo "INFO: Great you have txtconv installed."
 #    echo
@@ -134,7 +134,7 @@ else
 fi
 
 # Check to see if UnicodeCCount is installed and in path:
-if hash UnicodeCCount 2>/dev/null; then
+if type UnicodeCCount &>/dev/null; then
     echo "INFO: Great you have UnicodeCCount installed."
 else
     echo
@@ -148,7 +148,7 @@ else
 fi
 
 # Python Check
-if hash python 2>/dev/null; then
+if type python &>/dev/null; then
     echo "INFO: Great you have Python installed. Looks like you are using the following version:" 
     echo "      $(python --version)"
 else
@@ -163,7 +163,7 @@ else
 fi
 
 # PIP Check
-if hash pip 2>/dev/null; then
+if type pip &>/dev/null; then
     echo "INFO: Great you have PIP installed."
 else
     echo
