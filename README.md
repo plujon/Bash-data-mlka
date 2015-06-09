@@ -1,31 +1,81 @@
 #Bash-data-mlka
-Bash script for mashing mlka data
+_The purpose is to run data through UnicodeCcount and TECKit enmass. The script then processes the data counts produced against various keyboard layouts and gives evaluations on what the keyboard layout efficentcy is for the text of a specific language._
+
+This script is written in bash script for processing and computing MLKA data. Some python code is embeded, and some perl dependencies are required. 
+
+There are three related repositories:
+* The MLKA project
+	* https://github.com/HughP/MLKA
+* MLKA-Data which is a set of test data for testing and building this script.
+	* https://github.com/HughP/MLKA-data
+* Keyboard-File-Types which is simply a data array of various types of keyboard layout file types.
+	* https://github.com/HughP/Keyboard-File-Types
 
 This is written to work on OS X and linux.
-The purpose is to run data through UnicodeCcount and TECKit enmass.
+Tested on: 
+* OS X 10.6.8 & 10.9.5
+* Ubuntu
+
 
 ##Requires these dependencies
 
 1. [UnicodeCCount](http://scripts.sil.org/UnicodeCharacterCount) - version 0.3
-2. [TECKit](http://scripts.sil.org/TECkitDownloads) - version 2.5.4 
+ * A sub-dependency here is Perl - ** We do not check for Perl.** _We do chech for UnicodeCCount._
+ * The script will not be successful and will output an error if [allkeys.txt](http://www.unicode.org/Public/UCA/latest/allkeys.txt) is not present in your Perl instance. This is a requirement of UnicodeCcount to operate. The error message will say: `Your Perl installation is missing the UCA keys file. Please download http://www.unicode.org/Public/UCA/latest/allkeys.txt and put a copy into the '/usr/lib/x86_64-linux-gnu/perl/5.20/Unicode/Collate' folder.`
+2. [TECKit](http://scripts.sil.org/TECkitDownloads) - version 2.5.4
 3. [Typing](https://github.com/michaeldickens/Typing) by Michael Dickens
  * `git clone https://github.com/michaeldickens/Typing.git`
 4. [CSVfix](https://bitbucket.org/neilb/csvfix) version 1.6 [More info](http://neilb.bitbucket.org/csvfix/)
- * `hg clone https://bitbucket.org/neilb/csvfix`. Hugh used homebrew and `brew install csvfix`.
+ * `hg clone https://bitbucket.org/neilb/csvfix`.
+ * OS X users are encouraged to use homebrew via `brew install csvfix`.
 5. [WikiExtractor Script](https://github.com/bwbaugh/wikipedia-extractor) extracts and cleans text from Wikipedia database dump and stores output in a number of files of similar size in a given directory. This is a mirror of the script by [Giuseppe Attardi](https://github.com/attardi/wikiextractor) - Which might actually be the original. http://medialab.di.unipi.it/wiki/Wikipedia_Extractor
  * `git clone https://github.com/bwbaugh/wikipedia-extractor.git`.
-6. Stave Python script for Cleaning Wikipedia
-7. Stave Python script for counting digrams
+6. Python (Preferably 2.7)
+  * One option among many for OS X Users is `brew install python`.
+ * Other Python dependencies:
+  * pip
+  * PyGal - for SVG production of graphs.
+  * Pandas - A python module for data processing
+7. Python scripts embeded in the .bash script:
+ * WikipediaExtractor Cleaner by Matt Stave (with edits by Hugh Paterson III)
+ * Stave + Paterson python script for counting digrams
+ * Script for transposing/pivoting data in CSV files
 8. JavaScript count by jkpat
+9. Palaso-python module
 
 
 ##Roadmap
-- [ ] 0.1 Process and compute Wikipedia, Keyboard layouts, and James texts.
-- [x] 0.3 Check for dependencies exit script if not present.
- - [ ] 0.3.5 Install dependencies if needed. 
+- [x] 0.0.1 ingest and organize Wikipedia data
+- [x] 0.0.2 ingest and organize James data
+- [ ] 0.0.3 ingest and organize Keyboard data
+- [ ] 0.1 Ingest, and organize data (Wikipedia, James, and Keyboards)
+- [ ] 0.1.1 Perform text clean up tasks for corpora.
+- [ ] 0.1.2 UnicodeCCount on data from Wikipedia, Keyboard layouts, and James texts.
+- [ ] 0.1.4 Graph output from UnicodeCCount
+- [ ] 0.1.5 Ingest and compare stats with other comparitive studies.
+- [ ] 0.1.6 Ingest Phonology Data and compare with orthography data.
+- [x] 0.2 Check for dependencies exit script if not present.
+- [ ] 0.3 Make warning items the correct color see: http://misc.flogisoft.com/bash/tip_colors_and_formatting
+ - [ ] 0.3.5 Install dependencies if needed.
 - [ ] 0.4 Hook up carpalx
 - [ ] 0.5 Consider switching from CSVfix to [CSVkit](https://github.com/onyxfish/csvkit) the commands are not the same. But it seems the power is better with CSVkit. CSVkit is on github but is not in a brew tap. A fuller analysis should be done by looking at the issues and features. Documentation is here: http://csvkit.readthedocs.org/en/0.9.1/
 - [ ] 0.7 Detect and remove SFM File markers from Scripture corpora.
+- [ ] 0.8 Automatically check to see if the version of the ISO 639-3 file is the latest file.
+- [ ] 0.9 start to read JSON keyboard files, convert them to CSV See: https://github.com/archan937/jsonv.sh ; https://github.com/jehiah/json2csv
+ - [ ] 0.9.2 for going the other way consider http://stackoverflow.com/questions/24300508/csv-to-json-using-bash or [csvkit's tools](http://csvkit.readthedocs.org/en/latest/scripts/in2csv.html).
+ - [ ] 0.9.8 Add method for other corproa to exist and to be processed.
+- [ ] 1.5 add Swifter layout analysis.
+
+##Corpus clean up process
+###Wikipedia
+* download wikipedia data
+* Extractor script
+* Extractor cleaner
+* Paterson use of TECKit to clean residue left by Extractor cleaner
+* Typography character conversion by TECKit
+
+###James
+*
 
 ##List of files
 _The purpose of this section is to list the kinds of files and the quantity of files which are created and used during the data processing process. There are three kinds of files: those we start off with, temp-files which are created and then deleted by the script, and those which are generated along the way, but represent some type of analysis._
@@ -111,12 +161,19 @@ git push
 
 ###Notes for Hugh
 
+####Bash
 * For reference: http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html
+* Arrays: http://mywiki.wooledge.org/BashGuide/Arrays ; http://tldp.org/LDP/abs/html/arrays.html
+* Nested Loops: http://www.tldp.org/LDP/abs/html/nestedloops.html
+
+####Git
+* Cherry picking with git: https://www.kernel.org/pub/software/scm/git/docs/git-cherry-pick.html
+
 
 ####Notes by Hugh for where he got what.
 
 @Jonathan to find this I was looking here: http://unix.stackexchange.com/questions/138634/shortest-way-to-extract-last-3-characters-of-base-minus-suffix-filename I am not sure how to implement this in this code base right now.
- 
+
 
 ####From Martin
 
@@ -166,9 +223,9 @@ print allchars
 ####From Marc
 >
 >Hi Hugh,
-> 
+>
 >I don’t have an immediate solution to your question – the Keyman source language is non-trivial to parse, although some for your requirements you may be able to get away with a lot less processing. We have Windows-based tools for analysis of a keyboard layout, but this may not be all that helpful to you.
-> 
+>
 >I am not sure if you are up for writing your own script to parse the source files or not. If you are, then I would advise the following process:
 >
 >*       The file format can be ANSI, UTF-8, or UTF-16. Convert the file to your preferred format before parsing.
@@ -199,11 +256,11 @@ print allchars
 >
 > *   Ignore any other tokens
 >
-> 
+>
 >I hope this helps and that I haven’t forgotten anything.
-> 
+>
 >Cheers,
-> 
+>
 >Marc
 
 ###Notes for all

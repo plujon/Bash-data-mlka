@@ -29,7 +29,6 @@ function cleanup() {
 if [ ! -f cleancsv/cleancsv ]; then
     echo "ERROR: cleancsv program not found!"
     # Clean up left over files then exit:
-    cleanup
     exit
 fi
 
@@ -50,7 +49,7 @@ if [ -f tmp_buffer_csv_col14.data ]; then
 
     # For every *wiki*.bz2 file do:
     for I in $(find * -maxdepth 0 -iname '*wiki*.bz2'); do
-	# This variable contains the first two 
+	# This variable contains the first two
 	# characters of the *wiki*.bz2 file:
 	FIRST_TWO_CHARS=${I:0:2}
 
