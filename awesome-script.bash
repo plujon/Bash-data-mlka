@@ -398,9 +398,7 @@ fi
 # List all Wikipedia dumps and store
 # results into the file Wikipedia-list.txt
 # We will use the >> rather than the > notation here because the file already exists. When we create new files we should use the > notation. However, in this case the file has aready been created by the `touch` command in the script initialization.
-cd "$DIR_WIKI_DATA"
-find * -maxdepth 0 -iname '*wiki*.bz2' >> ../$WIKI_LIST_FILE
-cd ..
+find $DIR_WIKI_DATA -maxdepth 0 -iname '*wiki*.bz2' | sed -e "s/$DIR_WIKI_DATA\///" >> $WIKI_LIST_FILE
 
 if [ "$(cat $WIKI_LIST_FILE | wc -l)" -eq "0" ]; then
     # No wikipedia dumps were found.
@@ -464,9 +462,7 @@ fi
 ###
 
 # Record to file what was fount and moved.
-cd $DIR_JAMES_DATA
-find * -maxdepth 0 -iname '*ori*james*.txt' >> ../$JAMES_LIST_FILE
-cd ../
+find $DIR_JAMES_DATA -maxdepth 0 -iname '*ori*james*.txt' | sed -e "s/$DIR_JAMES_DATA\///" >> $JAMES_LIST_FILE
 
 # Other
 
@@ -676,7 +672,7 @@ echo
 echo
 
 if [ -f iso-639-3.data ]; then
-    cd Wiki-Data
+    pushd Wiki-Data # YUCK
     # For every *wiki*.bz2 file do:
     for FILE in $(find * -maxdepth 0 -iname '*wiki*.bz2'); do
         for DATA in $(cat ../iso-639-3.data); do
@@ -699,7 +695,7 @@ if [ -f iso-639-3.data ]; then
         done
     done
 
-    cd .. # NOTE: need to change to $HOME_FOLDER
+    popd # YUCK
 fi
 
 # Sweep up
@@ -708,9 +704,7 @@ if [ -f iso-639-3.data ]; then
 fi
 
 # Report the languages found to the wikipedia list and to the master list
-cd $DIR_WIKI_DATA
-find * -maxdepth 0 -type d  \( ! -iname ".*" \) >> ../$WIKI_LANGUAGES
-cd "$HOME_FOLDER"
+find $DIR_WIKI_DATA -maxdepth 0 -type d  \( ! -iname ".*" \) >> $WIKI_LANGUAGES
 
 
 # Set the Variables.
@@ -860,7 +854,7 @@ echo
 echo "INFO: Creating some CSV files from the intial character counts."
 echo
 
-cd "$DIR_INITIAL_STATS_TITLE"
+pushd "$DIR_INITIAL_STATS_TITLE" # YUCK
 
 # Origional: ls -A1r *"$INITIAL_STATS_TITLE"*.txt | sort -t - -k 7 > "$INITIAL_STATS_TITLE"-list.txt
 
@@ -1028,7 +1022,7 @@ done
 # Applies to all corpora
 #############################
 
-cd "$HOME_FOLDER"
+popd # YUCK
 
 # Make directory for complied TECkit files to live in.
 mkdir "$DIR_TEC_FILES"
@@ -1054,13 +1048,11 @@ done
 
 # Go through the created texts and rename them to Match the typographical setting.
 
-cd $DIR_TYPOGRAHICAL_CORRECT_DATA
-
-for i in $(find * -iname *ori*.txt);do
+pushd $DIR_TYPOGRAHICAL_CORRECT_DATA # YUCK
+for i in $(find . -iname *ori*.txt); do
  	mv "$i" Typographical.${i:3}
 done
-
-cd "$HOME_FOLDER"
+popd # YUC
 
 ##########Hugh takes a break here. Needs actual testing#####
 
