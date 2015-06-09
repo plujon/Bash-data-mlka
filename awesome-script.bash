@@ -674,7 +674,7 @@ echo
 if [ -f iso-639-3.data ]; then
     pushd Wiki-Data # YUCK
     # For every *wiki*.bz2 file do:
-    for FILE in $(find * -maxdepth 0 -iname '*wiki*.bz2'); do
+    for FILE in *wiki*.bz2; do
         for DATA in $(cat ../iso-639-3.data); do
             if [[ ${FILE:0:2} == ${DATA:7:2} ]]; then
                 if [ -d ${DATA:1:3} ]; then
