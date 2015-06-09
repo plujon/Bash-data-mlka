@@ -805,7 +805,7 @@ echo "      This might take some time as we use a small python script tocycle th
 for i in $(cat "$INITIAL_STATS_TITLE"-list-csv.txt);do
 	echo "Transposing CSV files via Python."
 	cp "$i" ${i/%.csv/-ori.csv}
-	./bin/wiki_extractor_cleaner.py "$i" ${i/%.csv/-transpose.csv}
+	$HOME_FOLDER/bin/wiki_extractor_cleaner.py "$i" ${i/%.csv/-transpose.csv}
 	mv ${i/%.csv/-ori.csv} ${i/%-ori.csv/.csv}
 done
 
@@ -891,7 +891,7 @@ ls -A1r *${INITIAL_STATS_TITLE}*.csv | sort -t - -k 7 > "$INITIAL_STATS_TITLE"-l
 for i in $(cat "$INITIAL_STATS_TITLE"-list-csv.txt);do
 	echo "Transposing CSV files via Python."
 	cp "$i" ${i/%.csv/-ori.csv}
-	./bin/csv_transposer.py "$i" ${i/%.csv/-transpose.csv}
+	$HOME_FOLDER/bin/csv_transposer.py "$i" ${i/%.csv/-transpose.csv}
 	mv ${i/%.csv/-ori.csv} ${i/%-ori.csv/.csv}
 done
 
